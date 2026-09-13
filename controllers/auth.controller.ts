@@ -1,9 +1,6 @@
 import {
   InitiateAuthCommand,
-  GetUserCommand,
-  RespondToAuthChallengeCommand,
   type AuthenticationResultType,
-  type InitiateAuthCommandOutput,
 } from "@aws-sdk/client-cognito-identity-provider";
 import { congintoClient } from "../server.js";
 import {
@@ -38,22 +35,9 @@ type authJWtEligibilityType =
 
 const authJWtEligibility = async (
   authResult: AuthenticationResultType | undefined,
-  responseFromCognito: InitiateAuthCommandOutput,
-  username?: string | null,
-  password?: string | null,
+
 ): Promise<authJWtEligibilityType> => {
   if (!authResult) {
-    const setNewPasswordCMD = new RespondToAuthChallengeCommand({
-      ClientId: process.env.CONGNITO_CLIENT_ID,
-      ChallengeName: "NEW_PASSWORD_REQUIRED",
-      Session: responseFromCognito.Session,
-      ChallengeResponses: {
-        USERNAME: username || "",
-        NEW_PASSWORD: password || "",
-        SECRET_HASH: generateSecretHash(username || ""),
-      },
-    });
-    await congintoClient.send(setNewPasswordCMD);
 
     return {
       status: false,
@@ -96,8 +80,7 @@ export const AuthLoginValidate = async ({
 
     // checks first authResult and idtoken
     const responseFromEligibility = await authJWtEligibility(
-      authResult,
-      responseFromCognito,
+      authResult
     );
 
     if (!responseFromEligibility.status) return responseFromEligibility;
@@ -115,7 +98,7 @@ export const AuthLoginValidate = async ({
     fastify.log.error(Err);
     return {
       status: false,
-      message: "Something went wrong, Please try again later.",
+      message: "Invalid Credentials",
     };
   }
 };
