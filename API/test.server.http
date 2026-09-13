@@ -1,0 +1,2 @@
+### Testing server
+GET http://localhost:2026/ping HTTP/1.1
