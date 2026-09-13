@@ -1,6 +1,22 @@
-const fastify = require("fastify")({ logger: true });
-require("dotenv").config({
-    path:".env.development"
+import Fastify from "fastify";
+import { CognitoIdentityProviderClient } from "@aws-sdk/client-cognito-identity-provider";
+import dotenv from "dotenv";
+import  {AuthRoutes}  from "./routes/auth.js";
+
+export const fastify = Fastify({ logger: true });
+
+// config dotenv
+dotenv.config({
+  path: ".env.development",
+});
+
+// register here
+fastify.register(AuthRoutes);
+
+// Setting Congnito region
+
+export const congintoClient = new CognitoIdentityProviderClient({
+  region: process.env.AWS_REGION,
 });
 
 // Testing the server
@@ -17,4 +33,4 @@ const start = () => {
   }
 };
 
-start()
+start();
