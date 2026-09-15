@@ -1,0 +1,15 @@
+
+
+POST http://localhost:2026/user/create HTTP/1.1
+Content-Type:application/json
+
+{
+    "username":"test123",
+    "subId":"324234",
+    "profile":{
+        "firstname":"test123",
+        "lastName":"test"
+    },
+    "email":"test123@gmail.com"
+
+}

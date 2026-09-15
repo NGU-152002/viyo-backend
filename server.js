@@ -2,6 +2,7 @@ import Fastify from "fastify";
 import { CognitoIdentityProviderClient } from "@aws-sdk/client-cognito-identity-provider";
 import dotenv from "dotenv";
 import  {AuthRoutes}  from "./routes/auth.js";
+import { UserRoutes } from "./routes/user.route.ts";
 
 export const fastify = Fastify({ logger: true });
 
@@ -12,6 +13,7 @@ dotenv.config({
 
 // register here
 fastify.register(AuthRoutes);
+fastify.register(UserRoutes)
 
 // Setting Congnito region
 
